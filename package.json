@@ -11,8 +11,13 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/node": "^25.5.0",
+    "eslint": "^10.1.0",
     "git-commit-msg-linter": "^5.0.8",
-    "typescript": "^5.9.3"
+    "globals": "^17.4.0",
+    "standard": "^17.1.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.57.1"
   }
 }
