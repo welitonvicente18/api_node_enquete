@@ -28,7 +28,7 @@ const makeAddAccountRepository = (): AddAccountRepository => {
 const makeSut = (): SutTypes => {
     const encrypterStub = makeEncrypter()
     const addAccountRepositoryStub = makeAddAccountRepository()
-    const sut = new DbAddAccount(encrypterStub,addAccountRepositoryStub)
+    const sut = new DbAddAccount(encrypterStub, addAccountRepositoryStub)
     return {
         sut,
         encrypterStub,
@@ -43,9 +43,7 @@ interface SutTypes {
 }
 describe('DbAddAccount Usecase', () => {
     test('should call Encrypter witch correct password', () => {
-
         const { sut, encrypterStub } = makeSut();
-
         const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
 
         const accountData = {
@@ -59,7 +57,6 @@ describe('DbAddAccount Usecase', () => {
     })
 
     test('should throw if Encrypter thows', () => {
-
         const { sut, encrypterStub } = makeSut();
 
         jest.spyOn(encrypterStub, 'encrypt').mockReturnValueOnce(
@@ -78,10 +75,8 @@ describe('DbAddAccount Usecase', () => {
         expect(promisse).rejects.toThrow()
     })
 
-    test('should call AddccountRepository with correct values',async () => {
-
+    test('should call AddccountRepository with correct values', async () => {
         const { sut, addAccountRepositoryStub } = makeSut();
-
         const addSpy = jest.spyOn(addAccountRepositoryStub, 'add')
 
         const accountData = {
@@ -96,5 +91,23 @@ describe('DbAddAccount Usecase', () => {
             email: 'valid_name',
             password: 'hashed_password'
         })
+    })
+
+    test('should thrwid Encypter throws', async () => {
+        const { sut, addAccountRepositoryStub } = makeSut();
+        jest.spyOn(addAccountRepositoryStub, 'add').mockReturnValueOnce(
+            new Promise((resolve, reject) => {
+                reject(new Error())
+            })
+        )
+
+        const accountData = {
+            name: 'valid_name',
+            email: 'valid_name',
+            password: 'valid_password'
+        }
+
+        const promisse = sut.add(accountData)
+        await expect(promisse).rejects.toThrow()
     })
 })
